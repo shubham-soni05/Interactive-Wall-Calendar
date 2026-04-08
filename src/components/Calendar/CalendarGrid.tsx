@@ -28,7 +28,7 @@ interface CalendarGridProps {
   isDarkMode: boolean;
 }
 
-export const CalendarGrid = React.memo(({
+export function CalendarGrid({
   currentDate,
   rangeStart,
   rangeEnd,
@@ -41,7 +41,7 @@ export const CalendarGrid = React.memo(({
   holidays,
   notes,
   isDarkMode
-}: CalendarGridProps) => {
+}: CalendarGridProps) {
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart, { weekStartsOn: 1 });
@@ -93,4 +93,4 @@ export const CalendarGrid = React.memo(({
       </div>
     </div>
   );
-});
+}
