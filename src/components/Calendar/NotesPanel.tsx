@@ -240,9 +240,9 @@ export function NotesPanel({
           </div>
           
           <div className="flex flex-wrap gap-2">
-            {palette.map((color) => (
+            {palette.map((color, index) => (
               <button
-                key={color}
+                key={`${color}-${index}`}
                 type="button"
                 onClick={() => setSelectedColor(color)}
                 className={cn(

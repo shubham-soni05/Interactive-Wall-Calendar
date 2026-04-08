@@ -139,18 +139,18 @@ const THEME_IMAGES: Record<string, string[]> = {
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    className="absolute bottom-full right-0 mb-4 w-56 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden z-50"
+                    className="absolute bottom-16 right-0 mb-4 w-[calc(100vw-4rem)] max-w-[220px] bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border border-zinc-200 dark:border-zinc-800 rounded-t-2xl rounded-b-2xl shadow-2xl overflow-hidden z-[100]"
                   >
                     <div className="p-2">
-                      <div className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2 px-3 pt-2">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-0.5 px-3 pt-1">
                         Image Theme
                       </div>
-                      <div className="grid grid-cols-2 gap-1">
+                      <div className="grid grid-cols-2 gap-0.5">
                         {THEMES.map((theme) => (
                           <button
                             key={theme}
                             onClick={() => handleThemeSelect(theme)}
-                            className="text-left px-3 py-2 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors capitalize"
+                            className="text-left px-2 py-1 text-[10px] font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors capitalize truncate"
                           >
                             {theme}
                           </button>
