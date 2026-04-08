@@ -117,7 +117,7 @@ export function NotesPanel({
 
   return (
     <div className={cn(
-      "w-full md:w-80 border-l flex flex-col h-full",
+      "w-full lg:w-80 border-l flex flex-col h-full",
       isDarkMode ? "border-zinc-800 bg-zinc-950" : "border-zinc-200/50 bg-white",
       className
     )}>

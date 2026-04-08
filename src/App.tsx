@@ -282,22 +282,22 @@ export default function App() {
         <div 
           ref={calendarRef}
           className={cn(
-            "rounded-xl paper-shadow overflow-hidden flex flex-col md:flex-row h-full min-h-[800px] border",
+            "rounded-xl paper-shadow overflow-hidden flex flex-col lg:flex-row h-full min-h-[800px] border",
             isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200/50"
           )}
         >
           {/* Main Calendar Content */}
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col min-w-0">
             <HeroSection 
               currentDate={currentDate} 
               imageUrl={imageUrl} 
               onImageUpload={handleImageUpload}
             />
             
-            <div className="p-3 sm:p-6 md:p-8 flex-1 flex flex-col">
+            <div className="p-3 sm:p-6 md:p-8 flex-1 flex flex-col min-w-0">
               {/* Header Controls */}
-              <div className="flex flex-col sm:flex-row items-center justify-between mb-4 md:mb-8 gap-4">
-                <div className="flex items-center gap-3 w-full sm:w-auto justify-start">
+              <div className="flex flex-col lg:flex-row items-center justify-between mb-4 md:mb-8 gap-4">
+                <div className="flex items-center gap-3 w-full lg:w-auto justify-start">
                   <div className={cn(
                     "p-2 md:p-3 rounded-xl transition-colors duration-500 flex-shrink-0",
                     "bg-calendar-primary"
@@ -314,8 +314,8 @@ export default function App() {
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between w-full sm:w-auto gap-2 md:gap-4">
-                  <div className="flex items-center gap-1 w-full justify-between sm:justify-end">
+                <div className="flex items-center justify-between w-full lg:w-auto gap-2 md:gap-4">
+                  <div className="flex items-center gap-1 w-full justify-between lg:justify-end">
                     <button 
                       onClick={handlePrevMonth}
                       className={cn(
@@ -360,7 +360,7 @@ export default function App() {
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.2}
                 onDragEnd={handleDragEnd}
-                className="flex-1 flex flex-col"
+                className="flex-1 flex flex-col min-w-0"
               >
                 <CalendarGrid 
                   currentDate={currentDate}
@@ -381,7 +381,7 @@ export default function App() {
           </div>
 
           {/* Notes Sidebar & Actions */}
-          <div className="flex flex-col h-full border-l border-zinc-200/50 dark:border-zinc-800">
+          <div className="flex flex-col lg:h-full border-t lg:border-t-0 lg:border-l border-zinc-200/50 dark:border-zinc-800">
             <NotesPanel 
               currentDate={currentDate}
               rangeStart={rangeStart}
@@ -397,7 +397,7 @@ export default function App() {
             
             {/* Vertical Action Bar */}
             <div className={cn(
-              "p-6 md:p-8 flex flex-row md:flex-col-reverse gap-6 md:gap-6 items-center md:items-end justify-center md:justify-start border-t transition-colors duration-500",
+              "p-6 md:p-8 flex flex-row lg:flex-col-reverse gap-6 md:gap-6 items-center lg:items-end justify-center lg:justify-start border-t transition-colors duration-500",
               isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200/50",
               !includeNotes && "flex-1"
             )}>
