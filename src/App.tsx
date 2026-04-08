@@ -10,9 +10,15 @@ import {
   endOfWeek, 
   eachDayOfInterval, 
   isSameMonth, 
-  isToday 
+  isToday,
+  isSameDay,
+  isWithinInterval,
+  isBefore,
+  isAfter
 } from 'date-fns';
 import { cn } from './utils/cn';
+import { NotesPanel } from './components/Calendar/NotesPanel';
+import { DEFAULT_THEME } from './utils/theme';
 
 export type NoteCategory = 'personal' | 'work' | 'event' | 'important';
 
@@ -35,9 +41,51 @@ export interface Note {
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [rangeStart, setRangeStart] = useState<Date | null>(null);
+  const [rangeEnd, setRangeEnd] = useState<Date | null>(null);
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
+
+  const handleDateClick = (date: Date) => {
+    if (!rangeStart || (rangeStart && rangeEnd)) {
+      setRangeStart(date);
+      setRangeEnd(null);
+    } else {
+      if (isSameDay(date, rangeStart)) {
+        setRangeStart(null);
+        setRangeEnd(null);
+      } else {
+        setRangeEnd(date);
+      }
+    }
+  };
+
+  const handleAddNote = (text: string, title?: string, category: NoteCategory = 'personal', color?: string) => {
+    const newNote: Note = {
+      id: Math.random().toString(36).substr(2, 9),
+      date: format(rangeStart || currentDate, 'yyyy-MM-dd'),
+      title,
+      text,
+      category,
+      color,
+      type: rangeStart && rangeEnd ? 'range' : rangeStart ? 'day' : 'month',
+      range: rangeStart && rangeEnd ? {
+        start: format(isBefore(rangeStart, rangeEnd) ? rangeStart : rangeEnd, 'yyyy-MM-dd'),
+        end: format(isAfter(rangeEnd, rangeStart) ? rangeEnd : rangeStart, 'yyyy-MM-dd')
+      } : undefined
+    };
+    setNotes([...notes, newNote]);
+  };
+
+  const handleUpdateNote = (id: string, updates: Partial<Note>) => {
+    setNotes(notes.map(n => n.id === id ? { ...n, ...updates } : n));
+  };
+
+  const handleDeleteNote = (id: string) => {
+    setNotes(notes.filter(n => n.id !== id));
+  };
 
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(monthStart);
@@ -117,19 +165,33 @@ export default function App() {
                   {days.map((day, dayIdx) => {
                     const isCurrentMonth = isSameMonth(day, currentDate);
                     const isTodayDate = isToday(day);
+                    const isSelected = rangeStart && isSameDay(day, rangeStart) || rangeEnd && isSameDay(day, rangeEnd);
+                    const isWithinSelection = rangeStart && rangeEnd && isWithinInterval(day, {
+                      start: isBefore(rangeStart, rangeEnd) ? rangeStart : rangeEnd,
+                      end: isAfter(rangeEnd, rangeStart) ? rangeEnd : rangeStart
+                    });
                     
                     return (
                       <div 
                         key={day.toString()}
+                        onClick={() => handleDateClick(day)}
                         className={cn(
-                          "relative flex items-center justify-center rounded-xl sm:rounded-2xl text-sm sm:text-lg font-medium transition-all",
+                          "relative flex items-center justify-center rounded-xl sm:rounded-2xl text-sm sm:text-lg font-medium transition-all cursor-pointer",
                           "min-h-[40px] sm:min-h-[60px] md:min-h-[80px]",
                           !isCurrentMonth && "text-zinc-300",
-                          isCurrentMonth && !isTodayDate && "text-zinc-800",
-                          isTodayDate && "bg-calendar-primary text-calendar-contrast font-bold shadow-md"
+                          isCurrentMonth && !isTodayDate && !isSelected && !isWithinSelection && "text-zinc-800 hover:bg-zinc-100",
+                          isTodayDate && !isSelected && "bg-calendar-primary/20 text-calendar-primary font-bold",
+                          isSelected && "bg-calendar-primary text-calendar-contrast font-bold shadow-md scale-105 z-10",
+                          isWithinSelection && !isSelected && "bg-calendar-primary/10 text-calendar-primary"
                         )}
                       >
                         <span className="relative z-10">{format(day, 'd')}</span>
+                        {/* Note Indicators */}
+                        <div className="absolute bottom-1 sm:bottom-2 left-0 right-0 flex justify-center gap-1">
+                          {notes.filter(n => n.date === format(day, 'yyyy-MM-dd')).slice(0, 3).map((note, i) => (
+                            <div key={i} className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full" style={{ backgroundColor: note.color || DEFAULT_THEME.primary }} />
+                          ))}
+                        </div>
                       </div>
                     );
                   })}
@@ -138,9 +200,20 @@ export default function App() {
             </div>
           </div>
 
-          {/* Static Sidebar Placeholder */}
-          <div className="w-full md:w-80 border-l border-zinc-200/50 bg-zinc-50/50 flex flex-col items-center justify-center p-8">
-            <p className="text-zinc-400 font-medium uppercase tracking-widest text-sm text-center">Notes Panel<br/>Goes Here</p>
+          {/* Notes Sidebar */}
+          <div className="w-full md:w-80 border-l border-zinc-200/50 bg-zinc-50/50 flex flex-col">
+            <NotesPanel 
+              currentDate={currentDate}
+              rangeStart={rangeStart}
+              rangeEnd={rangeEnd}
+              notes={notes}
+              onAddNote={handleAddNote}
+              onUpdateNote={handleUpdateNote}
+              onDeleteNote={handleDeleteNote}
+              isDarkMode={false}
+              theme={DEFAULT_THEME}
+              className="flex-1"
+            />
           </div>
 
         </div>
