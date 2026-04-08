@@ -327,6 +327,9 @@ export default function App() {
                 hoverDate={hoverDate}
                 onDateClick={handleDateClick}
                 onMouseEnter={setHoverDate}
+                onLongPress={() => {}}
+                isDraggingRange={false}
+                onRangeDragEnd={() => {}}
                 holidays={HOLIDAYS}
                 notes={notes}
                 isDarkMode={isDarkMode}

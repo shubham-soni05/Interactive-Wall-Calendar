@@ -20,6 +20,9 @@ interface CalendarGridProps {
   hoverDate: Date | null;
   onDateClick: (date: Date) => void;
   onMouseEnter: (date: Date) => void;
+  onLongPress: (date: Date) => void;
+  isDraggingRange: boolean;
+  onRangeDragEnd: () => void;
   holidays: Holiday[];
   notes: Note[];
   isDarkMode: boolean;
@@ -32,6 +35,9 @@ export function CalendarGrid({
   hoverDate,
   onDateClick,
   onMouseEnter,
+  onLongPress,
+  isDraggingRange,
+  onRangeDragEnd,
   holidays,
   notes,
   isDarkMode
