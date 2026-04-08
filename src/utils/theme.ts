@@ -20,6 +20,7 @@ export async function extractThemeFromImage(imageUrl: string): Promise<CalendarT
   return new Promise((resolve) => {
     const img = new Image();
     img.crossOrigin = 'Anonymous';
+    img.referrerPolicy = 'no-referrer';
     img.src = imageUrl;
 
     img.onload = () => {
@@ -52,13 +53,13 @@ export async function extractThemeFromImage(imageUrl: string): Promise<CalendarT
           contrast: chroma.contrast(softBase, 'white') > 4.5 ? '#ffffff' : '#000000'
         });
       } catch (error) {
-        console.error('Failed to extract theme:', error);
+        // Silently fallback to default theme if canvas is tainted or other error
         resolve(DEFAULT_THEME);
       }
     };
 
     img.onerror = () => {
-      console.error('Failed to load image for theme extraction');
+      // Silently fallback to default theme if image fails to load (e.g. CORS)
       resolve(DEFAULT_THEME);
     };
   });
