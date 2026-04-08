@@ -11,7 +11,13 @@
 
 @layer base {
   body {
-    @apply bg-[#F5F5F0] text-zinc-900 antialiased;
+    @apply bg-[#F5F5F0] text-zinc-900 antialiased transition-colors duration-500;
+    background-image: url("https://www.transparenttextures.com/patterns/paper.png");
+  }
+  
+  html.dark body {
+    @apply bg-black text-zinc-100;
+    background-image: none;
   }
 }
 

@@ -32,14 +32,18 @@ export function HeroSection({ currentDate, imageUrl, onImageUpload }: HeroSectio
           animate={{ rotateX: 0, originY: 0, opacity: 1 }}
           exit={{ rotateX: 90, originY: 1, opacity: 0 }}
           transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-          className="absolute inset-0"
+          className="absolute inset-0 bg-zinc-800"
         >
-          <img
-            src={imageUrl}
-            alt={format(currentDate, 'MMMM yyyy')}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            referrerPolicy="no-referrer"
-          />
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={format(currentDate, 'MMMM yyyy')}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className="w-full h-full bg-zinc-800" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           
           <div className="absolute bottom-6 left-8 text-white">

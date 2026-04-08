@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Moon, Sun } from 'lucide-react';
 import { 
   format, 
   addMonths, 
@@ -18,7 +18,9 @@ import {
 } from 'date-fns';
 import { cn } from './utils/cn';
 import { NotesPanel } from './components/Calendar/NotesPanel';
-import { DEFAULT_THEME } from './utils/theme';
+import { HeroSection } from './components/Calendar/HeroSection';
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { extractThemeFromImage, applyThemeToCSS, DEFAULT_THEME, type CalendarTheme } from './utils/theme';
 
 export type NoteCategory = 'personal' | 'work' | 'event' | 'important';
 
@@ -44,6 +46,25 @@ export default function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [rangeStart, setRangeStart] = useState<Date | null>(null);
   const [rangeEnd, setRangeEnd] = useState<Date | null>(null);
+
+  const [isDarkMode, setIsDarkMode] = useLocalStorage('calendar-dark-mode', false);
+  const [theme, setTheme] = useLocalStorage<CalendarTheme>('calendar-theme', DEFAULT_THEME);
+  const [customImage, setCustomImage] = useLocalStorage<string | null>('calendar-image', null);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    applyThemeToCSS(theme);
+  }, [isDarkMode, theme]);
+
+  const handleImageUpload = async (imageUrl: string) => {
+    setCustomImage(imageUrl);
+    try {
+      const newTheme = await extractThemeFromImage(imageUrl);
+      setTheme(newTheme);
+    } catch (error) {
+      console.error('Failed to extract theme:', error);
+    }
+  };
 
   const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
@@ -100,20 +121,18 @@ export default function App() {
   const weekDays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 md:p-8 bg-[#F5F5F0]">
+    <div className="min-h-screen flex items-center justify-center p-4 md:p-8 transition-colors duration-500">
       <div className="w-full max-w-6xl relative">
         
         {/* Main Calendar Container */}
-        <div className="rounded-xl paper-shadow overflow-hidden flex flex-col md:flex-row h-full min-h-[800px] border bg-white border-zinc-200/50">
+        <div className="rounded-xl paper-shadow overflow-hidden flex flex-col md:flex-row h-full min-h-[800px] border bg-white dark:bg-zinc-900 border-zinc-200/50 dark:border-zinc-800/50 transition-colors duration-500">
           
           <div className="flex-1 flex flex-col">
-            {/* Placeholder Hero Section */}
-            <div className="h-48 md:h-64 bg-zinc-800 relative overflow-hidden flex items-end p-8">
-              <h1 className="text-5xl md:text-7xl font-serif font-bold text-white tracking-tighter z-10">
-                {format(currentDate, 'MMMM')} <br/>
-                <span className="text-2xl md:text-3xl font-sans tracking-widest opacity-80">{format(currentDate, 'yyyy')}</span>
-              </h1>
-            </div>
+            <HeroSection 
+              currentDate={currentDate}
+              imageUrl={customImage || ''}
+              onImageUpload={handleImageUpload}
+            />
             
             <div className="p-3 sm:p-6 md:p-8 flex-1 flex flex-col">
               {/* Header Controls */}
@@ -130,8 +149,15 @@ export default function App() {
                 </div>
                 
                 <div className="flex items-center justify-between w-full sm:w-auto gap-2 md:gap-4">
+                  <button 
+                    onClick={() => setIsDarkMode(!isDarkMode)}
+                    className="p-2 md:p-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors"
+                    title="Toggle dark mode"
+                  >
+                    {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  </button>
                   <div className="flex items-center gap-1 w-full justify-between sm:justify-end">
-                    <button onClick={prevMonth} className="p-2 rounded-lg hover:bg-calendar-primary/15 text-zinc-600 transition-colors">
+                    <button onClick={prevMonth} className="p-2 rounded-lg hover:bg-calendar-primary/15 text-zinc-600 dark:text-zinc-400 transition-colors">
                       <ChevronLeft className="w-5 h-5" />
                     </button>
                     <div className="px-2 md:px-4 py-2 flex flex-col items-center justify-center min-w-[100px] md:min-w-[120px]">
@@ -142,7 +168,7 @@ export default function App() {
                         {format(currentDate, 'yyyy')}
                       </span>
                     </div>
-                    <button onClick={nextMonth} className="p-2 rounded-lg hover:bg-calendar-primary/15 text-zinc-600 transition-colors">
+                    <button onClick={nextMonth} className="p-2 rounded-lg hover:bg-calendar-primary/15 text-zinc-600 dark:text-zinc-400 transition-colors">
                       <ChevronRight className="w-5 h-5" />
                     </button>
                   </div>
@@ -178,8 +204,8 @@ export default function App() {
                         className={cn(
                           "relative flex items-center justify-center rounded-xl sm:rounded-2xl text-sm sm:text-lg font-medium transition-all cursor-pointer",
                           "min-h-[40px] sm:min-h-[60px] md:min-h-[80px]",
-                          !isCurrentMonth && "text-zinc-300",
-                          isCurrentMonth && !isTodayDate && !isSelected && !isWithinSelection && "text-zinc-800 hover:bg-zinc-100",
+                          !isCurrentMonth && "text-zinc-300 dark:text-zinc-700",
+                          isCurrentMonth && !isTodayDate && !isSelected && !isWithinSelection && "text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
                           isTodayDate && !isSelected && "bg-calendar-primary/20 text-calendar-primary font-bold",
                           isSelected && "bg-calendar-primary text-calendar-contrast font-bold shadow-md scale-105 z-10",
                           isWithinSelection && !isSelected && "bg-calendar-primary/10 text-calendar-primary"
@@ -210,8 +236,8 @@ export default function App() {
               onAddNote={handleAddNote}
               onUpdateNote={handleUpdateNote}
               onDeleteNote={handleDeleteNote}
-              isDarkMode={false}
-              theme={DEFAULT_THEME}
+              isDarkMode={isDarkMode}
+              theme={theme}
               className="flex-1"
             />
           </div>
