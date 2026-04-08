@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-calendar-primary: var(--calendar-primary);
+  --color-calendar-light: var(--calendar-light);
+  --color-calendar-medium: var(--calendar-medium);
+  --color-calendar-dark: var(--calendar-dark);
+  --color-calendar-contrast: var(--calendar-contrast);
+}
+
+@layer base {
+  :root {
+    --calendar-primary: #ec4899;
+    --calendar-light: #fdf2f8;
+    --calendar-medium: #f9a8d4;
+    --calendar-dark: #db2777;
+    --calendar-contrast: #ffffff;
+    
+    transition: 
+      --calendar-primary 500ms ease,
+      --calendar-light 500ms ease,
+      --calendar-medium 500ms ease,
+      --calendar-dark 500ms ease,
+      --calendar-contrast 500ms ease;
+  }
+
+  body {
+    @apply bg-[#F5F5F0] text-[#141414] font-sans antialiased transition-colors duration-500;
+    background-image: url("https://www.transparenttextures.com/patterns/paper.png");
+  }
+  
+  html.dark body {
+    @apply bg-black text-zinc-100;
+    background-image: none;
+  }
+}
+
+@layer utilities {
+  .paper-shadow {
+    box-shadow: 
+      0 1px 3px rgba(0,0,0,0.12), 
+      0 1px 2px rgba(0,0,0,0.24),
+      0 10px 20px rgba(0,0,0,0.05);
+  }
+  
+  .spiral-ring {
+    @apply w-3 h-8 bg-gradient-to-b from-zinc-400 via-zinc-200 to-zinc-500 rounded-full border border-zinc-500/30;
+  }
+}
+

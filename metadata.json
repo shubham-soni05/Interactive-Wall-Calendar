@@ -1,0 +1,5 @@
+{
+  "name": "Interactive Wall Calendar",
+  "description": "A production-level, visually stunning interactive wall calendar with date range selection and persistent notes.",
+  "requestFramePermissions": []
+}
