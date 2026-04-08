@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Moon, Sun } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Moon, Sun, Download, Loader2, Share2 } from 'lucide-react';
 import { 
   format, 
   addMonths, 
@@ -19,8 +19,12 @@ import {
 import { cn } from './utils/cn';
 import { NotesPanel } from './components/Calendar/NotesPanel';
 import { HeroSection } from './components/Calendar/HeroSection';
+import { ShareModal } from './components/Calendar/ShareModal';
+import { Toast } from './components/Calendar/Toast';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { extractThemeFromImage, applyThemeToCSS, DEFAULT_THEME, type CalendarTheme } from './utils/theme';
+import { exportComponentAsImage } from './utils/export';
+import { encodeState, decodeState, getSharedState, type ShareState } from './utils/share';
 
 export type NoteCategory = 'personal' | 'work' | 'event' | 'important';
 
@@ -50,6 +54,38 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useLocalStorage('calendar-dark-mode', false);
   const [theme, setTheme] = useLocalStorage<CalendarTheme>('calendar-theme', DEFAULT_THEME);
   const [customImage, setCustomImage] = useLocalStorage<string | null>('calendar-image', null);
+
+  const [isExporting, setIsExporting] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const data = params.get('data');
+    const shortId = params.get('s');
+    
+    let decoded: ShareState | null = null;
+    
+    if (data) {
+      decoded = decodeState(data);
+    } else if (shortId) {
+      decoded = getSharedState(shortId);
+    }
+
+    if (decoded) {
+      if (decoded.rangeStart) setRangeStart(new Date(decoded.rangeStart));
+      if (decoded.rangeEnd) setRangeEnd(new Date(decoded.rangeEnd));
+      if (decoded.notes.length > 0) {
+        setNotes(decoded.notes);
+        if (decoded.rangeStart) {
+          setCurrentDate(startOfMonth(new Date(decoded.rangeStart)));
+        }
+      }
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDarkMode);
@@ -108,6 +144,38 @@ export default function App() {
     setNotes(notes.filter(n => n.id !== id));
   };
 
+  const handleExport = async () => {
+    if (!calendarRef.current) return;
+    setIsExporting(true);
+    try {
+      const filename = `calendar-${format(currentDate, 'MMMM-yyyy').toLowerCase()}`;
+      await exportComponentAsImage(calendarRef.current, filename, {
+        backgroundColor: isDarkMode ? '#000000' : '#F5F5F0',
+        padding: 40
+      });
+      setToastMessage('Calendar exported as image!');
+      setShowToast(true);
+    } catch (error) {
+      console.error('Export failed:', error);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleShare = () => {
+    const state: ShareState = {
+      rangeStart: rangeStart ? rangeStart.toISOString() : null,
+      rangeEnd: rangeEnd ? rangeEnd.toISOString() : null,
+      notes: notes
+    };
+    
+    const encoded = encodeState(state);
+    const url = `${window.location.origin}${window.location.pathname}?data=${encoded}`;
+    
+    setShareUrl(url);
+    setIsShareModalOpen(true);
+  };
+
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart, { weekStartsOn: 1 }); // Start on Monday
@@ -122,7 +190,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 md:p-8 transition-colors duration-500">
-      <div className="w-full max-w-6xl relative">
+      <div className="w-full max-w-6xl relative" ref={calendarRef}>
         
         {/* Main Calendar Container */}
         <div className="rounded-xl paper-shadow overflow-hidden flex flex-col md:flex-row h-full min-h-[800px] border bg-white dark:bg-zinc-900 border-zinc-200/50 dark:border-zinc-800/50 transition-colors duration-500">
@@ -226,8 +294,8 @@ export default function App() {
             </div>
           </div>
 
-          {/* Notes Sidebar */}
-          <div className="w-full md:w-80 border-l border-zinc-200/50 bg-zinc-50/50 flex flex-col">
+          {/* Notes Sidebar & Actions */}
+          <div className="w-full md:w-80 border-l border-zinc-200/50 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 flex flex-col">
             <NotesPanel 
               currentDate={currentDate}
               rangeStart={rangeStart}
@@ -240,10 +308,69 @@ export default function App() {
               theme={theme}
               className="flex-1"
             />
+            
+            {/* Action Bar */}
+            <div className={cn(
+              "p-6 md:p-8 flex flex-row md:flex-col-reverse gap-6 md:gap-6 items-center md:items-end justify-center md:justify-start border-t transition-colors duration-500",
+              isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200/50"
+            )}>
+              <div className="flex flex-col items-center md:items-end gap-2 group">
+                <button
+                  onClick={handleExport}
+                  disabled={isExporting}
+                  className={cn(
+                    "w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-lg relative overflow-hidden",
+                    "bg-calendar-primary text-calendar-contrast hover:scale-105 active:scale-95"
+                  )}
+                >
+                  {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                </button>
+                <span className={cn(
+                  "text-[8px] font-bold uppercase tracking-[0.3em] transition-colors",
+                  isDarkMode ? "text-zinc-500 group-hover:text-zinc-300" : "text-zinc-400 group-hover:text-zinc-700"
+                )}>
+                  Download
+                </span>
+              </div>
+
+              <div className="flex flex-col items-center md:items-end gap-2 group">
+                <button
+                  onClick={handleShare}
+                  className={cn(
+                    "w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-lg relative overflow-hidden",
+                    "bg-calendar-primary text-calendar-contrast hover:scale-105 active:scale-95"
+                  )}
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+                <span className={cn(
+                  "text-[8px] font-bold uppercase tracking-[0.3em] transition-colors",
+                  isDarkMode ? "text-zinc-500 group-hover:text-zinc-300" : "text-zinc-400 group-hover:text-zinc-700"
+                )}>
+                  Share
+                </span>
+              </div>
+            </div>
           </div>
 
         </div>
       </div>
+
+      <ShareModal 
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        shareUrl={shareUrl}
+        selectedDates={rangeStart && rangeEnd ? `${format(rangeStart, 'MMM d')} - ${format(rangeEnd, 'MMM d')}` : rangeStart ? format(rangeStart, 'MMM d') : 'No dates selected'}
+        notesCount={notes.length}
+        isDarkMode={isDarkMode}
+      />
+
+      <Toast 
+        message={toastMessage}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+        isDarkMode={isDarkMode}
+      />
     </div>
   );
 }
