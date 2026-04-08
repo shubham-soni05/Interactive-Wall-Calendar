@@ -72,13 +72,8 @@ const THEME_IMAGES: Record<string, string[]> = {
 
   const handleThemeSelect = (theme: string) => {
     if (onImageUpload) {
-      const images = THEME_IMAGES[theme];
-      if (images && images.length > 0) {
-        const randomImageId = images[Math.floor(Math.random() * images.length)];
-        onImageUpload(`https://images.unsplash.com/photo-${randomImageId}?auto=format&fit=crop&q=80&w=1920`);
-      } else {
-        onImageUpload(`https://picsum.photos/seed/${theme}-${Math.random()}/1920/1080`);
-      }
+      const seed = Math.floor(Math.random() * 10000);
+      onImageUpload(`https://loremflickr.com/1920/1080/${theme}?lock=${seed}`);
     }
     setIsThemeMenuOpen(false);
   };

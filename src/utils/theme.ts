@@ -66,7 +66,7 @@ export async function extractThemeFromImage(imageUrl: string): Promise<CalendarT
 }
 
 export function generatePalette(baseColor: string): string[] {
-  const color = chroma(baseColor);
+  const color = chroma(baseColor || '#ec4899'); // Fallback to a default color if baseColor is invalid/empty
   return [
     color.hex(), // Primary
     color.set('hsl.h', (color.get('hsl.h') + 30) % 360).hex(),
