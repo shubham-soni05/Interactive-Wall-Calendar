@@ -48,8 +48,14 @@ export function NotesPanel({
 
   const palette = useMemo(() => {
     const basePalette = generatePalette(theme.primary);
+    // Ensure we don't have duplicates and keep it clean
     return [...new Set([...basePalette, ...customColors])];
   }, [theme.primary, customColors]);
+
+  const isColorInPalette = (color: string | null) => {
+    if (!color) return false;
+    return palette.some(p => p.toLowerCase() === color.toLowerCase());
+  };
 
   const filteredNotes = notes.filter(note => {
     const monthStr = format(currentDate, 'yyyy-MM');
@@ -261,6 +267,26 @@ export function NotesPanel({
                 {selectedColor === color && <Check className="w-3 h-3 text-white" />}
               </button>
             ))}
+
+            {selectedColor && !isColorInPalette(selectedColor) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomColors(prev => {
+                    if (prev.includes(selectedColor)) return prev;
+                    return [...prev, selectedColor].slice(-8);
+                  });
+                }}
+                className={cn(
+                  "w-6 h-6 rounded-full ring-2 ring-offset-2 ring-calendar-primary scale-110 flex items-center justify-center animate-in zoom-in-50 duration-200"
+                )}
+                style={{ backgroundColor: selectedColor }}
+                title="Click to add this color to your palette"
+              >
+                <Plus className="w-3 h-3 text-white" />
+              </button>
+            )}
+
             <button
               type="button"
               onClick={() => colorInputRef.current?.click()}
@@ -272,20 +298,18 @@ export function NotesPanel({
             >
               <Plus className="w-3 h-3" />
             </button>
-            {selectedColor && (
+            {selectedColor && customColors.includes(selectedColor) && (
               <button
                 type="button"
                 onClick={() => {
-                  if (customColors.includes(selectedColor)) {
-                    setCustomColors(customColors.filter(c => c !== selectedColor));
-                  }
+                  setCustomColors(customColors.filter(c => c !== selectedColor));
                   setSelectedColor(null);
                 }}
                 className={cn(
                   "w-6 h-6 rounded-full border-2 border-dashed transition-all hover:scale-110 flex items-center justify-center",
                   isDarkMode ? "border-red-900/30 hover:border-red-500/50 text-red-500/50" : "border-red-100 hover:border-red-200 text-red-400"
                 )}
-                title="Clear selection or remove custom color"
+                title="Remove custom color"
               >
                 <Trash2 className="w-3 h-3" />
               </button>
@@ -294,12 +318,11 @@ export function NotesPanel({
               ref={colorInputRef}
               type="color"
               className="sr-only"
+              onInput={(e) => {
+                setSelectedColor((e.target as HTMLInputElement).value);
+              }}
               onChange={(e) => {
-                const color = e.target.value;
-                if (!customColors.includes(color)) {
-                  setCustomColors([...customColors, color]);
-                }
-                setSelectedColor(color);
+                setSelectedColor(e.target.value);
               }}
             />
           </div>
