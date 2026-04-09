@@ -95,7 +95,7 @@ export function DayCell({
   return (
     <div
       className={cn(
-        "relative h-16 md:h-24 flex flex-col p-2 transition-all duration-300 group cursor-pointer rounded-2xl",
+        "relative h-16 md:h-24 flex items-center justify-center p-2 transition-all duration-300 group cursor-pointer rounded-2xl",
         isDarkMode 
           ? cn(
               !isCurrentMonth && "opacity-20",
@@ -123,45 +123,43 @@ export function DayCell({
         setShowMobileTooltip(false);
       }}
     >
-      <div className="flex justify-between items-start">
-        <span className={cn(
-          "text-sm md:text-lg font-bold",
-          isTodayDate && !isStart && !isEnd && (isDarkMode ? "text-zinc-100" : "text-zinc-900"),
-          (isStart || isEnd) && "text-calendar-contrast",
-          isWeekend(date) && !isStart && !isEnd && !isTodayDate && "text-calendar-primary"
-        )}>
-          {format(date, 'd')}
-        </span>
-        
-        <div className="flex flex-col items-end gap-1">
-          {holiday && isCurrentMonth && (
-            <div 
-              className={cn(
-                "w-1.5 h-1.5 rounded-full shadow-sm",
-                holiday.type === 'festival' ? "bg-amber-500" : "bg-calendar-primary"
-              )} 
-            />
-          )}
-          {hasNote && isCurrentMonth && (
-            <div className="grid grid-cols-2 gap-0.5 justify-items-end">
-              {dayNotes.slice(0, 4).map((note) => (
-                <div 
-                  key={note.id}
-                  className={cn(
-                    "w-2 h-2 rounded-full ring-1 shadow-sm",
-                    isDarkMode ? "ring-zinc-950" : "ring-white"
-                  )}
-                  style={{ backgroundColor: note.color || CATEGORY_COLORS[note.category] }}
-                />
-              ))}
-              {dayNotes.length > 4 && (
-                <div className={cn("text-[8px] font-bold leading-none flex items-center justify-center", isDarkMode ? "text-zinc-500" : "text-zinc-400")}>
-                  +{dayNotes.length - 4}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+      <span className={cn(
+        "text-xs md:text-base font-bold transition-transform duration-300 group-hover:scale-110",
+        isTodayDate && !isStart && !isEnd && (isDarkMode ? "text-zinc-100" : "text-zinc-900"),
+        (isStart || isEnd) && "text-calendar-contrast",
+        isWeekend(date) && !isStart && !isEnd && !isTodayDate && "text-calendar-primary"
+      )}>
+        {format(date, 'd')}
+      </span>
+      
+      <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+        {holiday && isCurrentMonth && (
+          <div 
+            className={cn(
+              "w-1.5 h-1.5 rounded-full shadow-sm",
+              holiday.type === 'festival' ? "bg-amber-500" : "bg-calendar-primary"
+            )} 
+          />
+        )}
+        {hasNote && isCurrentMonth && (
+          <div className="grid grid-cols-2 gap-0.5 justify-items-end">
+            {dayNotes.slice(0, 4).map((note) => (
+              <div 
+                key={note.id}
+                className={cn(
+                  "w-1.5 h-1.5 rounded-full ring-1 shadow-sm",
+                  isDarkMode ? "ring-zinc-950" : "ring-white"
+                )}
+                style={{ backgroundColor: note.color || CATEGORY_COLORS[note.category] }}
+              />
+            ))}
+            {dayNotes.length > 4 && (
+              <div className={cn("text-[7px] font-bold leading-none flex items-center justify-center", isDarkMode ? "text-zinc-500" : "text-zinc-400")}>
+                +{dayNotes.length - 4}
+              </div>
+            )}
+          </div>
+        )}
       </div>
       
       {/* Tooltip Preview (Desktop Hover & Mobile Tap) */}
