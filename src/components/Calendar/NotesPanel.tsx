@@ -44,6 +44,7 @@ export function NotesPanel({
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [customColors, setCustomColors] = useState<string[]>([]);
+  const [pendingColor, setPendingColor] = useState<string | null>(null);
   const colorInputRef = React.useRef<HTMLInputElement>(null);
 
   const palette = useMemo(() => {
@@ -54,7 +55,13 @@ export function NotesPanel({
 
   const isColorInPalette = (color: string | null) => {
     if (!color) return false;
-    return palette.some(p => p.toLowerCase() === color.toLowerCase());
+    const searchColor = color.toLowerCase();
+    return palette.some(p => p.toLowerCase() === searchColor);
+  };
+
+  const isSameColor = (c1: string | null, c2: string | null) => {
+    if (!c1 || !c2) return false;
+    return c1.toLowerCase() === c2.toLowerCase();
   };
 
   const filteredNotes = notes.filter(note => {
@@ -257,30 +264,37 @@ export function NotesPanel({
               <button
                 key={`${color}-${index}`}
                 type="button"
-                onClick={() => setSelectedColor(color)}
+                onClick={() => {
+                  setSelectedColor(color);
+                  setPendingColor(null);
+                }}
                 className={cn(
                   "w-6 h-6 rounded-full transition-all hover:scale-110 flex items-center justify-center",
-                  selectedColor === color ? "ring-2 ring-offset-2 ring-calendar-primary scale-110" : "opacity-60"
+                  isSameColor(selectedColor, color) ? "ring-2 ring-offset-2 ring-calendar-primary scale-110" : "opacity-60"
                 )}
                 style={{ backgroundColor: color }}
               >
-                {selectedColor === color && <Check className="w-3 h-3 text-white" />}
+                {isSameColor(selectedColor, color) && <Check className="w-3 h-3 text-white" />}
               </button>
             ))}
 
-            {selectedColor && !isColorInPalette(selectedColor) && (
+            {pendingColor && !isColorInPalette(pendingColor) && (
               <button
                 type="button"
                 onClick={() => {
+                  const colorToAdd = pendingColor.toLowerCase();
                   setCustomColors(prev => {
-                    if (prev.includes(selectedColor)) return prev;
-                    return [...prev, selectedColor].slice(-8);
+                    const lowerPrev = prev.map(c => c.toLowerCase());
+                    if (lowerPrev.includes(colorToAdd)) return prev;
+                    return [...prev, colorToAdd];
                   });
+                  setPendingColor(null);
+                  setSelectedColor(colorToAdd);
                 }}
                 className={cn(
                   "w-6 h-6 rounded-full ring-2 ring-offset-2 ring-calendar-primary scale-110 flex items-center justify-center animate-in zoom-in-50 duration-200"
                 )}
-                style={{ backgroundColor: selectedColor }}
+                style={{ backgroundColor: pendingColor }}
                 title="Click to add this color to your palette"
               >
                 <Plus className="w-3 h-3 text-white" />
@@ -298,11 +312,12 @@ export function NotesPanel({
             >
               <Plus className="w-3 h-3" />
             </button>
-            {selectedColor && customColors.includes(selectedColor) && (
+            {selectedColor && customColors.some(c => c.toLowerCase() === selectedColor.toLowerCase()) && (
               <button
                 type="button"
                 onClick={() => {
-                  setCustomColors(customColors.filter(c => c !== selectedColor));
+                  const colorToRemove = selectedColor.toLowerCase();
+                  setCustomColors(customColors.filter(c => c.toLowerCase() !== colorToRemove));
                   setSelectedColor(null);
                 }}
                 className={cn(
@@ -319,10 +334,17 @@ export function NotesPanel({
               type="color"
               className="sr-only"
               onInput={(e) => {
-                setSelectedColor((e.target as HTMLInputElement).value);
+                const color = (e.target as HTMLInputElement).value.toLowerCase();
+                setPendingColor(color);
               }}
               onChange={(e) => {
-                setSelectedColor(e.target.value);
+                const color = e.target.value.toLowerCase();
+                if (isColorInPalette(color)) {
+                  setSelectedColor(color);
+                  setPendingColor(null);
+                } else {
+                  setPendingColor(color);
+                }
               }}
             />
           </div>
