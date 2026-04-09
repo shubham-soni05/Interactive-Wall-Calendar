@@ -3,6 +3,7 @@ import { format, isBefore, isAfter } from 'date-fns';
 import { Moon, Sun } from 'lucide-react';
 import { motion } from 'motion/react';
 import { SpiralBinding } from './components/Calendar/SpiralBinding';
+import { HeroSection } from './components/Calendar/HeroSection';
 import { CalendarGrid } from './components/Calendar/CalendarGrid';
 import { NotesPanel } from './components/Calendar/NotesPanel';
 import { ShareModal } from './components/Calendar/ShareModal';
@@ -68,8 +69,6 @@ const HERO_IMAGES: Record<string, string> = {
   '12': 'https://images.unsplash.com/photo-1477601263568-184e2c65358b?auto=format&fit=crop&q=80&w=1920',
 };
 
-// Interactive Wall Calendar - Main Application Entry Point
-// Updated breakpoints for better consistency across environments
 export default function App() {
   const {
     currentDate,
@@ -95,7 +94,11 @@ export default function App() {
   const [shareUrl, setShareUrl] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [customImages, setCustomImages] = useLocalStorage<Record<string, string>>('calendar-custom-images', {});
   const calendarRef = useRef<HTMLDivElement>(null);
+
+  const monthKey = format(currentDate, 'MM');
+  const imageUrl = customImages[monthKey] || HERO_IMAGES[monthKey] || HERO_IMAGES['04'];
 
   useEffect(() => {
     if (isDarkMode) {
@@ -233,11 +236,17 @@ export default function App() {
         <div 
           ref={calendarRef}
           className={cn(
-            "rounded-xl paper-shadow overflow-hidden flex flex-row h-full min-h-[800px] border",
+            "rounded-xl paper-shadow flex flex-col lg:flex-row h-full min-h-[800px] border grain",
             isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200/50"
           )}
         >
-          <div className="flex-[3] flex flex-col min-w-0">
+          <div className="flex-1 flex flex-col min-w-0">
+            <HeroSection 
+              currentDate={currentDate} 
+              imageUrl={imageUrl} 
+              onImageUpload={handleImageUpload}
+            />
+            
             <div className="p-3 sm:p-6 md:p-8 flex-1 flex flex-col min-w-0">
               <CalendarHeader
                 currentDate={currentDate}
@@ -286,7 +295,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col h-full border-l border-zinc-200/50 dark:border-zinc-800">
+          <div className="flex flex-col lg:h-full border-t lg:border-t-0 border-zinc-200/50 dark:border-zinc-800">
             <NotesPanel 
               currentDate={currentDate}
               rangeStart={rangeStart}
@@ -297,7 +306,7 @@ export default function App() {
               onDeleteNote={handleDeleteNote}
               isDarkMode={isDarkMode}
               theme={theme}
-              className={cn("w-full flex-1", !includeNotes && "hidden")}
+              className={cn("flex-1", !includeNotes && "hidden")}
             />
             
             <CalendarActions
