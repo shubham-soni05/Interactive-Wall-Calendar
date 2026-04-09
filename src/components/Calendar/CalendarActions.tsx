@@ -22,7 +22,7 @@ export const CalendarActions: React.FC<CalendarActionsProps> = ({
 }) => {
   return (
     <div className={cn(
-      "p-6 md:p-8 flex flex-row lg:flex-col-reverse gap-6 md:gap-6 items-center lg:items-end justify-center lg:justify-start border-t transition-colors duration-500",
+      "p-6 md:p-8 flex flex-row md:flex-col-reverse gap-6 md:gap-6 items-center md:items-end justify-center md:justify-start border-t transition-colors duration-500",
       isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200/50",
       !includeNotes && "flex-1"
     )}>

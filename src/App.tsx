@@ -69,6 +69,8 @@ const HERO_IMAGES: Record<string, string> = {
   '12': 'https://images.unsplash.com/photo-1477601263568-184e2c65358b?auto=format&fit=crop&q=80&w=1920',
 };
 
+// Interactive Wall Calendar - Main Application Entry Point
+// Updated breakpoints for better consistency across environments
 export default function App() {
   const {
     currentDate,
