@@ -307,10 +307,16 @@ export default function App() {
 
         <div className="mt-8 flex flex-col md:flex-row justify-between items-center px-4 gap-4">
           <div className="flex flex-col items-center md:items-start gap-1">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-40">
+            <p className={cn(
+              "text-[10px] font-bold uppercase tracking-[0.3em]",
+              isDarkMode ? "text-zinc-600" : "text-zinc-400"
+            )}>
               Interactive Wall Calendar &copy; 2026
             </p>
-            <p className="text-[9px] font-medium opacity-20 uppercase tracking-[0.2em]">
+            <p className={cn(
+              "text-[9px] font-medium uppercase tracking-[0.2em]",
+              isDarkMode ? "text-zinc-800" : "text-zinc-300"
+            )}>
               Handcrafted with precision and care
             </p>
           </div>

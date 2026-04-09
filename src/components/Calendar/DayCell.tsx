@@ -184,7 +184,10 @@ export function DayCell({
                         {holiday.name}
                       </span>
                     </div>
-                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] opacity-40">
+                    <span className={cn(
+                      "text-[9px] font-bold uppercase tracking-[0.2em]",
+                      isDarkMode ? "text-zinc-400" : "text-zinc-500"
+                    )}>
                       {holiday.type} Holiday
                     </span>
                   </div>
@@ -193,7 +196,10 @@ export function DayCell({
                 {hasNote && (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className={cn("text-[9px] font-bold uppercase tracking-[0.2em] opacity-40", isDarkMode ? "text-zinc-500" : "text-zinc-400")}>
+                      <span className={cn(
+                        "text-[9px] font-bold uppercase tracking-[0.2em]",
+                        isDarkMode ? "text-zinc-400" : "text-zinc-500"
+                      )}>
                         Events & Notes
                       </span>
                       <StickyNote className={cn("w-3 h-3 opacity-20", isDarkMode ? "text-zinc-100" : "text-zinc-900")} />
@@ -219,7 +225,10 @@ export function DayCell({
                       ))}
                     </div>
                     {dayNotes.length > 3 && (
-                      <p className={cn("text-[9px] font-bold uppercase tracking-widest text-center pt-2 border-t", isDarkMode ? "border-zinc-800 text-zinc-600" : "border-zinc-100 text-zinc-400")}>
+                      <p className={cn(
+                        "text-[9px] font-bold uppercase tracking-widest text-center pt-2 border-t",
+                        isDarkMode ? "border-zinc-800 text-zinc-500" : "border-zinc-100 text-zinc-400"
+                      )}>
                         + {dayNotes.length - 3} more events
                       </p>
                     )}

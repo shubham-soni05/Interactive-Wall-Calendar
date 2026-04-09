@@ -76,7 +76,10 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
             )}>
               {format(currentDate, 'MMMM')}
             </span>
-            <span className="text-[8px] md:text-[9px] font-medium opacity-40 tracking-widest md:tracking-[0.4em] leading-none">
+            <span className={cn(
+              "text-[8px] md:text-[9px] font-medium tracking-widest md:tracking-[0.4em] leading-none",
+              isDarkMode ? "text-zinc-500" : "text-zinc-400"
+            )}>
               {format(currentDate, 'yyyy')}
             </span>
           </button>
