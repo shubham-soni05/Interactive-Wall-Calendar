@@ -28,20 +28,20 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         <button
           onClick={() => onViewModeChange(viewMode === 'monthly' ? 'yearly' : 'monthly')}
           className={cn(
-            "p-2 md:p-3 rounded-xl transition-all duration-500 flex-shrink-0 hover:scale-105 active:scale-95",
-            viewMode === 'yearly' ? "bg-calendar-primary text-calendar-contrast shadow-lg" : (isDarkMode ? "bg-zinc-800 text-zinc-400" : "bg-zinc-100 text-zinc-500")
+            "p-2 md:p-3 rounded-xl transition-all duration-500 flex-shrink-0 hover:scale-105 active:scale-95 shadow-lg",
+            viewMode === 'yearly' 
+              ? "bg-calendar-primary text-calendar-contrast" 
+              : (isDarkMode ? "bg-zinc-800 text-zinc-100" : "bg-white text-zinc-900 border border-zinc-200")
           )}
-          title="Yearly At a Glance"
+          title={viewMode === 'monthly' ? "Yearly View" : "Monthly View"}
         >
-          <LayoutGrid className="w-5 h-5 md:w-6 md:h-6" />
+          {viewMode === 'monthly' ? (
+            <LayoutGrid className="w-5 h-5 md:w-6 md:h-6" />
+          ) : (
+            <CalendarIcon className="w-5 h-5 md:w-6 md:h-6" />
+          )}
         </button>
 
-        <div className={cn(
-          "p-2 md:p-3 rounded-xl transition-colors duration-500 flex-shrink-0",
-          "bg-calendar-primary"
-        )}>
-          <CalendarIcon className="w-5 h-5 md:w-6 md:h-6 text-calendar-contrast" />
-        </div>
         <div>
           <h2 className={cn(
             "text-[8px] md:text-[10px] font-bold uppercase tracking-widest md:tracking-[0.4em] leading-tight",
