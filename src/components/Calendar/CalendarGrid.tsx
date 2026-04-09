@@ -69,7 +69,7 @@ export const CalendarGrid = React.memo(({
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-px bg-zinc-200/20 dark:bg-zinc-800/20 rounded-2xl overflow-hidden border border-zinc-200/30 dark:border-zinc-800/30">
+      <div className="grid grid-cols-7">
         {days.map((day) => {
           const dateStr = format(day, 'yyyy-MM-dd');
           const holiday = holidays.find(h => h.date === dateStr);

@@ -3,7 +3,6 @@ import { format, isBefore, isAfter } from 'date-fns';
 import { Moon, Sun } from 'lucide-react';
 import { motion } from 'motion/react';
 import { SpiralBinding } from './components/Calendar/SpiralBinding';
-import { HeroSection } from './components/Calendar/HeroSection';
 import { CalendarGrid } from './components/Calendar/CalendarGrid';
 import { NotesPanel } from './components/Calendar/NotesPanel';
 import { ShareModal } from './components/Calendar/ShareModal';
@@ -96,11 +95,7 @@ export default function App() {
   const [shareUrl, setShareUrl] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-  const [customImages, setCustomImages] = useLocalStorage<Record<string, string>>('calendar-custom-images', {});
   const calendarRef = useRef<HTMLDivElement>(null);
-
-  const monthKey = format(currentDate, 'MM');
-  const imageUrl = customImages[monthKey] || HERO_IMAGES[monthKey] || HERO_IMAGES['04'];
 
   useEffect(() => {
     if (isDarkMode) {
@@ -243,12 +238,6 @@ export default function App() {
           )}
         >
           <div className="flex-[3] flex flex-col min-w-0">
-            <HeroSection 
-              currentDate={currentDate} 
-              imageUrl={imageUrl} 
-              onImageUpload={handleImageUpload}
-            />
-            
             <div className="p-3 sm:p-6 md:p-8 flex-1 flex flex-col min-w-0">
               <CalendarHeader
                 currentDate={currentDate}
