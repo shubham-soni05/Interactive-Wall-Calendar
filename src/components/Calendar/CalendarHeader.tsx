@@ -23,8 +23,8 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   onViewModeChange,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between mb-4 md:mb-8 gap-4">
-      <div className="flex items-center gap-3 w-full md:w-auto justify-start">
+    <div className="flex flex-col sm:flex-row items-center justify-between mb-4 md:mb-8 gap-4">
+      <div className="flex items-center gap-3 w-full sm:w-auto justify-start">
         <button
           onClick={() => onViewModeChange(viewMode === 'monthly' ? 'yearly' : 'monthly')}
           className={cn(
@@ -52,8 +52,8 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         </div>
       </div>
       
-      <div className="flex items-center justify-between w-full md:w-auto gap-2 md:gap-4">
-        <div className="flex items-center gap-1 w-full justify-between md:justify-end">
+      <div className="flex items-center justify-between w-full sm:w-auto gap-2 md:gap-4">
+        <div className="flex items-center gap-1 w-full justify-between sm:justify-end">
           <button 
             onClick={onPrevMonth}
             className={cn(

@@ -238,11 +238,11 @@ export default function App() {
         <div 
           ref={calendarRef}
           className={cn(
-            "rounded-xl paper-shadow overflow-hidden flex flex-col md:flex-row h-full min-h-[800px] border",
+            "rounded-xl paper-shadow overflow-hidden flex flex-col sm:flex-row h-full min-h-[800px] border",
             isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200/50"
           )}
         >
-          <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-1 flex flex-col min-w-0 max-w-full sm:max-w-[calc(100%-24rem)]">
             <HeroSection 
               currentDate={currentDate} 
               imageUrl={imageUrl} 
@@ -297,7 +297,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex flex-col md:h-full border-t md:border-t-0 border-zinc-200/50 dark:border-zinc-800">
+          <div className="flex flex-col sm:h-full border-t sm:border-t-0 border-zinc-200/50 dark:border-zinc-800">
             <NotesPanel 
               currentDate={currentDate}
               rangeStart={rangeStart}
@@ -308,7 +308,7 @@ export default function App() {
               onDeleteNote={handleDeleteNote}
               isDarkMode={isDarkMode}
               theme={theme}
-              className={cn("flex-1", !includeNotes && "hidden")}
+              className={cn("w-full sm:w-96 flex-1", !includeNotes && "hidden")}
             />
             
             <CalendarActions
