@@ -137,12 +137,12 @@ export function NotesPanel({
 
   return (
     <div className={cn(
-      "w-full lg:w-80 flex flex-col h-full",
+      "w-full md:w-96 flex flex-col h-full",
       isDarkMode ? "bg-zinc-950" : "bg-white",
       className
     )}>
       <div className={cn("p-8 border-b", isDarkMode ? "border-zinc-800" : "border-zinc-200/50")}>
-        <h2 className={cn("font-serif text-3xl font-black flex items-center gap-3 tracking-tighter", isDarkMode ? "text-zinc-100" : "text-zinc-900")}>
+        <h2 className={cn("font-serif text-4xl font-black flex items-center gap-3 tracking-tighter", isDarkMode ? "text-zinc-100" : "text-zinc-900")}>
           <StickyNote className="w-6 h-6 text-calendar-primary" />
           Notes
         </h2>

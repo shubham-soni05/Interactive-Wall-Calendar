@@ -236,7 +236,7 @@ export default function App() {
         <div 
           ref={calendarRef}
           className={cn(
-            "rounded-xl paper-shadow overflow-hidden flex flex-col lg:flex-row h-full min-h-[800px] border grain",
+            "rounded-xl paper-shadow overflow-hidden flex flex-col md:flex-row h-full min-h-[800px] border",
             isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200/50"
           )}
         >
@@ -295,7 +295,7 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:h-full border-t lg:border-t-0 border-zinc-200/50 dark:border-zinc-800">
+          <div className="flex flex-col md:h-full border-t md:border-t-0 border-zinc-200/50 dark:border-zinc-800">
             <NotesPanel 
               currentDate={currentDate}
               rangeStart={rangeStart}
