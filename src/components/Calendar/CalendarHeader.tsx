@@ -49,6 +49,7 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           )}>
             Interactive<br/>Wall Calendar
           </h2>
+          <span className="text-[8px] font-bold text-calendar-primary opacity-50">v3.0</span>
         </div>
       </div>
       
