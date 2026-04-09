@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { format } from 'date-fns';
+import { format, isBefore, isAfter } from 'date-fns';
 import { Moon, Sun } from 'lucide-react';
 import { motion } from 'motion/react';
 import { SpiralBinding } from './components/Calendar/SpiralBinding';
@@ -151,7 +151,22 @@ export default function App() {
   };
 
   const handleAddNote = (text: string, title?: string, category: NoteCategory = 'personal', color?: string) => {
-    // ... (rest of the logic)
+    const newNote: Note = {
+      id: crypto.randomUUID(),
+      text,
+      title,
+      category,
+      color,
+      date: rangeStart ? format(rangeStart, 'yyyy-MM-dd') : format(currentDate, 'yyyy-MM-dd'),
+      type: rangeStart && rangeEnd ? 'range' : rangeStart ? 'day' : 'month',
+      range: rangeStart && rangeEnd ? {
+        start: format(isBefore(rangeStart, rangeEnd) ? rangeStart : rangeEnd, 'yyyy-MM-dd'),
+        end: format(isAfter(rangeEnd, rangeStart) ? rangeEnd : rangeStart, 'yyyy-MM-dd')
+      } : undefined
+    };
+    setNotes([...notes, newNote]);
+    setToastMessage('Note added!');
+    setShowToast(true);
   };
 
   const handleUpdateNote = (id: string, updates: Partial<Note>) => {

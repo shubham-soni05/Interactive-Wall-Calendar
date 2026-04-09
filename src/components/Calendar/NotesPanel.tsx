@@ -55,7 +55,9 @@ export function NotesPanel({
       return note.date.startsWith(monthStr);
     }
     if (note.type === 'range' && note.range) {
-      return note.range.start.startsWith(monthStr) || note.range.end.startsWith(monthStr);
+      const startMonth = note.range.start.substring(0, 7);
+      const endMonth = note.range.end.substring(0, 7);
+      return startMonth <= monthStr && endMonth >= monthStr;
     }
     return false;
   }).sort((a, b) => {
