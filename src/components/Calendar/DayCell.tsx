@@ -95,22 +95,22 @@ export function DayCell({
   return (
     <div
       className={cn(
-        "relative h-16 md:h-24 flex items-center justify-center p-2 transition-all duration-300 group cursor-pointer rounded-2xl",
+        "relative h-16 md:h-24 flex items-center justify-center p-2 transition-all duration-500 group cursor-pointer grain",
         isDarkMode 
           ? cn(
-              !isCurrentMonth && "opacity-20",
+              !isCurrentMonth && "opacity-10",
               isInRange && "bg-calendar-primary/10",
-              (isStart || isEnd) && "bg-calendar-primary text-calendar-contrast z-10 shadow-lg shadow-calendar-primary/20"
+              (isStart || isEnd) && "bg-calendar-primary text-calendar-contrast z-10 shadow-xl shadow-calendar-primary/30"
             )
           : cn(
               !isCurrentMonth && "opacity-20",
               isInRange && "bg-calendar-primary/15",
-              (isStart || isEnd) && "bg-calendar-primary text-calendar-contrast z-10 shadow-lg shadow-calendar-primary/20"
+              (isStart || isEnd) && "bg-calendar-primary text-calendar-contrast z-10 shadow-xl shadow-calendar-primary/30"
             ),
         isTodayDate && !isStart && !isEnd && (
           isDarkMode 
-            ? "border-2 border-zinc-700 bg-zinc-900/50" 
-            : "border-2 border-zinc-200 bg-white shadow-sm"
+            ? "bg-zinc-800/80" 
+            : "bg-zinc-50/50"
         )
       )}
       onClick={handleInteraction}

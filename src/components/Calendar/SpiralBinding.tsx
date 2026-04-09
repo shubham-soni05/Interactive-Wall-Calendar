@@ -11,7 +11,7 @@ export function SpiralBinding() {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: i * 0.02 }}
-          className="w-1.5 h-8 bg-zinc-300 dark:bg-zinc-700 rounded-full shadow-[inset_0_2px_4px_rgba(0,0,0,0.1),0_2px_4px_rgba(0,0,0,0.1)]"
+          className="spiral-ring"
         />
       ))}
     </div>

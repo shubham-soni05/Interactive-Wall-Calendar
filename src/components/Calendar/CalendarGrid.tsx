@@ -69,25 +69,26 @@ export const CalendarGrid = React.memo(({
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-px bg-zinc-200/20 dark:bg-zinc-800/20 rounded-2xl overflow-hidden border border-zinc-200/30 dark:border-zinc-800/30">
         {days.map((day) => {
           const dateStr = format(day, 'yyyy-MM-dd');
           const holiday = holidays.find(h => h.date === dateStr);
           
           return (
-            <DayCell
-              key={day.toISOString()}
-              date={day}
-              currentMonth={currentDate}
-              rangeStart={rangeStart}
-              rangeEnd={rangeEnd}
-              hoverDate={hoverDate}
-              onDateClick={onDateClick}
-              onMouseEnter={onMouseEnter}
-              holiday={holiday}
-              notes={notes}
-              isDarkMode={isDarkMode}
-            />
+            <div key={day.toISOString()} className={isDarkMode ? "bg-zinc-950" : "bg-white"}>
+              <DayCell
+                date={day}
+                currentMonth={currentDate}
+                rangeStart={rangeStart}
+                rangeEnd={rangeEnd}
+                hoverDate={hoverDate}
+                onDateClick={onDateClick}
+                onMouseEnter={onMouseEnter}
+                holiday={holiday}
+                notes={notes}
+                isDarkMode={isDarkMode}
+              />
+            </div>
           );
         })}
       </div>

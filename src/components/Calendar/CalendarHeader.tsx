@@ -44,7 +44,7 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 
         <div>
           <h2 className={cn(
-            "text-[8px] md:text-[10px] font-bold uppercase tracking-widest md:tracking-[0.4em] leading-tight",
+            "text-[10px] md:text-[12px] font-bold uppercase tracking-widest md:tracking-[0.5em] leading-tight",
             isDarkMode ? "text-zinc-100" : "text-zinc-900"
           )}>
             Interactive<br/>Wall Calendar
@@ -57,28 +57,28 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           <button 
             onClick={onPrevMonth}
             className={cn(
-              "p-2 rounded-lg transition-colors",
+              "p-2 rounded-lg transition-all hover:scale-110 active:scale-95",
               isDarkMode ? "hover:bg-calendar-primary/10 text-zinc-400" : "hover:bg-calendar-primary/15 text-zinc-600"
             )}
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-6 h-6" />
           </button>
           <button 
             onClick={onResetDate}
             className={cn(
-              "px-2 md:px-4 py-2 transition-all duration-300 flex flex-col items-center justify-center min-w-[100px] md:min-w-[120px] group",
+              "px-4 md:px-8 py-2 transition-all duration-300 flex flex-col items-center justify-center min-w-[120px] md:min-w-[160px] group",
               isDarkMode ? "text-zinc-100" : "text-zinc-900"
             )}
           >
             <span className={cn(
-              "text-[10px] md:text-xs font-bold uppercase tracking-widest md:tracking-[0.3em] leading-none mb-1 transition-colors",
-              "group-hover:text-calendar-primary"
+              "text-2xl md:text-4xl font-serif font-black tracking-tighter transition-all duration-300 group-hover:text-calendar-primary",
+              isDarkMode ? "text-zinc-100" : "text-zinc-900"
             )}>
               {format(currentDate, 'MMMM')}
             </span>
             <span className={cn(
-              "text-[8px] md:text-[9px] font-medium tracking-widest md:tracking-[0.4em] leading-none",
-              isDarkMode ? "text-zinc-500" : "text-zinc-400"
+              "text-[10px] md:text-[12px] font-bold tracking-[0.5em] uppercase transition-all duration-300",
+              isDarkMode ? "text-zinc-500 group-hover:text-zinc-300" : "text-zinc-400 group-hover:text-zinc-600"
             )}>
               {format(currentDate, 'yyyy')}
             </span>
@@ -86,11 +86,11 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           <button 
             onClick={onNextMonth}
             className={cn(
-              "p-2 rounded-lg transition-colors",
+              "p-2 rounded-lg transition-all hover:scale-110 active:scale-95",
               isDarkMode ? "hover:bg-calendar-primary/10 text-zinc-400" : "hover:bg-calendar-primary/15 text-zinc-600"
             )}
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-6 h-6" />
           </button>
         </div>
       </div>

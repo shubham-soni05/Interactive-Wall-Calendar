@@ -33,16 +33,16 @@ export const YearlyView: React.FC<YearlyViewProps> = ({ currentDate, onMonthClic
           )}
         >
           <h3 className={cn(
-            "text-xs font-bold uppercase tracking-widest mb-3 text-center",
+            "text-[10px] font-black uppercase tracking-[0.3em] mb-4 text-center",
             isDarkMode ? "text-zinc-100" : "text-zinc-900",
             isSameMonth(month, currentDate) && "text-calendar-primary"
           )}>
             {format(month, 'MMMM')}
           </h3>
           
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-y-1">
             {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, i) => (
-              <div key={`${day}-${i}`} className="text-[8px] font-bold opacity-30 text-center">
+              <div key={`${day}-${i}`} className="text-[7px] font-black opacity-20 text-center mb-1">
                 {day}
               </div>
             ))}
@@ -78,13 +78,15 @@ function renderMiniDays(month: Date, notes: Note[]) {
         <div
           key={day.toISOString()}
           className={cn(
-            "text-[8px] flex flex-col items-center justify-center w-4 h-4 rounded-full mx-auto relative",
-            isToday(day) ? "bg-calendar-primary text-white font-bold" : "opacity-60"
+            "text-[7px] flex flex-col items-center justify-center w-4 h-4 rounded-full mx-auto relative transition-all",
+            isToday(day) 
+              ? "bg-calendar-primary text-calendar-contrast font-black shadow-sm scale-110" 
+              : "opacity-40 hover:opacity-100"
           )}
         >
           {format(day, 'd')}
           {hasNote && !isToday(day) && (
-            <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-0.5 h-0.5 rounded-full bg-calendar-primary" />
+            <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-0.5 h-0.5 rounded-full bg-calendar-primary opacity-60" />
           )}
         </div>
       );

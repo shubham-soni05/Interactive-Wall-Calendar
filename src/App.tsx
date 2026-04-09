@@ -236,7 +236,7 @@ export default function App() {
         <div 
           ref={calendarRef}
           className={cn(
-            "rounded-xl paper-shadow overflow-hidden flex flex-col lg:flex-row h-full min-h-[800px] border",
+            "rounded-xl paper-shadow overflow-hidden flex flex-col lg:flex-row h-full min-h-[800px] border grain",
             isDarkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200/50"
           )}
         >

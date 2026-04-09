@@ -37,13 +37,13 @@ export function ShareModal({ isOpen, onClose, shareUrl, selectedDates, notesCoun
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className={cn(
-              "relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border",
+              "relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border grain",
               isDarkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-200"
             )}
           >
-            <div className="p-8 space-y-6">
+            <div className="p-10 space-y-8">
               <div className="flex items-center justify-between">
-                <h3 className={cn("font-serif text-2xl font-black tracking-tight", isDarkMode ? "text-zinc-100" : "text-zinc-900")}>
+                <h3 className={cn("font-serif text-3xl font-black tracking-tighter", isDarkMode ? "text-zinc-100" : "text-zinc-900")}>
                   Share Calendar
                 </h3>
                 <button onClick={onClose} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
@@ -51,47 +51,47 @@ export function ShareModal({ isOpen, onClose, shareUrl, selectedDates, notesCoun
                 </button>
               </div>
 
-              <div className={cn("p-6 rounded-2xl space-y-4", isDarkMode ? "bg-zinc-950" : "bg-zinc-50")}>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-calendar-primary/10 flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-calendar-primary" />
+              <div className={cn("p-8 rounded-2xl space-y-6", isDarkMode ? "bg-zinc-950" : "bg-zinc-50/50")}>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-calendar-primary/10 flex items-center justify-center">
+                    <Calendar className="w-6 h-6 text-calendar-primary" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">Selected Dates</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-40 mb-1">Selected Dates</p>
                     <p className={cn("text-sm font-bold", isDarkMode ? "text-zinc-200" : "text-zinc-900")}>{selectedDates}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-calendar-primary/10 flex items-center justify-center">
-                    <StickyNote className="w-5 h-5 text-calendar-primary" />
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-calendar-primary/10 flex items-center justify-center">
+                    <StickyNote className="w-6 h-6 text-calendar-primary" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">Notes Included</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-40 mb-1">Notes Included</p>
                     <p className={cn("text-sm font-bold", isDarkMode ? "text-zinc-200" : "text-zinc-900")}>{notesCount} notes</p>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">Shareable Link</p>
-                <div className="flex gap-2">
+              <div className="space-y-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.3em] opacity-40">Shareable Link</p>
+                <div className="flex flex-col gap-3">
                   <div className={cn(
-                    "flex-1 px-4 py-3 rounded-xl text-xs font-mono truncate border",
-                    isDarkMode ? "bg-zinc-950 border-zinc-800 text-zinc-400" : "bg-zinc-50 border-zinc-200 text-zinc-500"
+                    "px-5 py-4 rounded-2xl text-xs font-mono truncate border",
+                    isDarkMode ? "bg-zinc-950 border-zinc-800 text-zinc-400" : "bg-zinc-50/50 border-zinc-200 text-zinc-500"
                   )}>
                     {shareUrl}
                   </div>
                   <button
                     onClick={handleCopy}
                     className={cn(
-                      "px-6 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center gap-2",
+                      "w-full py-4 rounded-2xl font-black text-xs uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3 shadow-lg",
                       copied 
                         ? "bg-emerald-500 text-white" 
-                        : "bg-calendar-primary text-calendar-contrast hover:scale-105 active:scale-95"
+                        : "bg-calendar-primary text-calendar-contrast hover:scale-[1.02] active:scale-[0.98]"
                     )}
                   >
-                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    {copied ? "Copied" : "Copy"}
+                    {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                    {copied ? "Copied" : "Copy Link"}
                   </button>
                 </div>
               </div>

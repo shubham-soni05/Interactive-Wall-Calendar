@@ -79,7 +79,7 @@ const THEME_IMAGES: Record<string, string[]> = {
   };
 
   return (
-    <div className="relative h-64 md:h-80 overflow-hidden rounded-t-lg group">
+    <div className="relative h-64 md:h-80 overflow-hidden rounded-t-lg group grain">
       <AnimatePresence mode="wait">
         <motion.div
           key={format(currentDate, 'yyyy-MM')}
@@ -87,26 +87,26 @@ const THEME_IMAGES: Record<string, string[]> = {
           animate={{ rotateX: 0, originY: 0, opacity: 1 }}
           exit={{ rotateX: 90, originY: 1, opacity: 0 }}
           transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-          className="absolute inset-0 bg-zinc-800"
+          className="absolute inset-0 bg-zinc-900"
         >
           {imageUrl ? (
             <img
               src={imageUrl}
               alt={format(currentDate, 'MMMM yyyy')}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               referrerPolicy="no-referrer"
             />
           ) : (
-            <div className="w-full h-full bg-zinc-800" />
+            <div className="w-full h-full bg-zinc-900" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           
-          <div className="absolute bottom-6 left-8 text-white">
+          <div className="absolute bottom-8 left-10 text-white">
             <motion.h1 
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="font-serif text-6xl md:text-8xl font-black tracking-tighter leading-none"
+              className="font-serif text-7xl md:text-9xl font-black tracking-tighter leading-[0.8]"
             >
               {format(currentDate, 'MMMM')}
             </motion.h1>
@@ -114,7 +114,7 @@ const THEME_IMAGES: Record<string, string[]> = {
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="font-sans text-xl md:text-2xl font-medium tracking-widest uppercase opacity-80 mt-2"
+              className="font-sans text-lg md:text-xl font-bold tracking-[0.5em] uppercase opacity-60 mt-4"
             >
               {format(currentDate, 'yyyy')}
             </motion.p>
